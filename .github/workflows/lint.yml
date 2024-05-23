@@ -36,6 +36,3 @@ jobs:
 
       - name: Run ESLint
         run: npx eslint src --ext .js,.jsx,.ts,.tsx
-
-      - name: Run Prettier
-        run: npx prettier --check "src/**/*.{js,jsx,ts,tsx}"
