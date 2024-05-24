@@ -8,11 +8,12 @@ interface PrevState {
   errors?: {
     email?: string;
     password?: string;
-    general?: string;
+    toast?: string;
   };
 }
-
-const emailSchema = z.string().email({ message: "Hey, sieht aus wie eine falsche E-Mail-Adresse!" });
+const emailSchema = z
+  .string()
+  .email({ message: "Hey, sieht aus wie eine falsche E-Mail-Adresse!" });
 const passwordSchema = z
   .string()
   .min(6, { message: "Dein Passwort muss mindestens 6 Zeichen lang sein" });
@@ -38,18 +39,9 @@ const createUserAction = async (prevState: PrevState, formData: FormData) => {
       errors,
     };
   }
-
-  try {
-    await signUp(email as string, password as string);
-    return { message: "success" };
-  } catch (error) {
-    return {
-      message: "error",
-      errors: {
-        general: "An unexpected error occurred",
-      },
-    };
-  }
+  
+  const { success, error } = await signUp(email as string, password as string);
+  return { message: success ? "success" : "error", errors: { toast: error } };
 };
 
 export default createUserAction;

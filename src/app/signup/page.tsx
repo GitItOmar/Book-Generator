@@ -6,11 +6,17 @@ import Link from "next/link";
 import heroImage from "@/public/README.avif";
 import { useFormState, useFormStatus } from "react-dom";
 import InputField from "@/components/InputField";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
 import createUserAction from "./actions/createUserAction";
 
 const initialState = {
   message: "",
-  errors: {},
+  errors: {
+    email: "",
+    password: "",
+    toast: "",
+  },
 };
 
 function Submit() {
@@ -29,6 +35,12 @@ function Submit() {
 
 export default function Signin() {
   const [state, createUser] = useFormState(createUserAction, initialState);
+
+  useEffect(() => {
+    if (state.message === "error" && state.errors?.toast) {
+      toast.error(state.errors.toast);
+    }
+  }, [state]);
 
   return (
     <div className="flex min-h-full flex-1">
