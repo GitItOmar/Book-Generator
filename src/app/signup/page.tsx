@@ -20,7 +20,7 @@ function Submit() {
       className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${pending ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600"}`}
       disabled={pending}
     >
-      {pending ? "Anmelden..." : "Anmelden"}
+      {pending ? "Registrieren..." : "Registrieren"}
     </button>
   );
 }
@@ -40,17 +40,8 @@ export default function Signin() {
               height={40}
             />
             <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Melde dich bei deinem Konto an
+              Erstelle ein Konto
             </h2>
-            <p className="mt-2 text-sm leading-6 text-gray-500">
-              Noch kein Mitglied?{" "}
-              <Link
-                href="/"
-                className="font-semibold text-indigo-600 hover:text-indigo-500"
-              >
-                Registriere dich hier
-              </Link>
-            </p>
           </div>
 
           <div className="mt-10">
@@ -92,29 +83,6 @@ export default function Signin() {
                       />
                     </div>
                   </label>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label htmlFor="remember-me" className="flex items-center">
-                    <input
-                      id="remember-me"
-                      name="remember-me"
-                      type="checkbox"
-                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                    />
-                    <span className="ml-3 block text-sm leading-6 text-gray-700">
-                      Angemeldet bleiben
-                    </span>
-                  </label>
-
-                  <div className="text-sm leading-6">
-                    <Link
-                      href="/"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      Passwort vergessen?
-                    </Link>
-                  </div>
                 </div>
 
                 <div>

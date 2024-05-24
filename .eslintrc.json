@@ -27,6 +27,7 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".tsx"] }],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "import/extensions": ["error", "never"]
   }
 }
