@@ -4,10 +4,19 @@ import Image from "next/image";
 import tailwindLogo from "@/public/TailwindUI Logo.svg";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import createUserAction from "./actions/createUserAction";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { googleSignUp } from "@/lib/firebase";
+import signInAction from "./actions/signInAction";
 
 const initialState = {
   message: "",
+  errors: {
+    email: "",
+    password: "",
+    toast: "",
+  },
 };
 
 function Submit() {
@@ -25,7 +34,28 @@ function Submit() {
 }
 
 export default function Signin() {
-  const [, createUser] = useFormState(createUserAction, initialState);
+  const [state, signIn] = useFormState(signInAction, initialState);
+  const router = useRouter();
+
+  const handleGoogleSignup = async () => {
+    const { success, error } = await googleSignUp();
+
+    if (success) {
+      router.push("/");
+    }
+
+    toast.error(error);
+  };
+
+  useEffect(() => {
+    if (state.message === "success") {
+      router.push("/");
+    }
+
+    if (state.message === "error" && state.errors?.toast) {
+      toast.error(state.errors.toast);
+    }
+  }, [state, router]);
 
   return (
     <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
@@ -53,7 +83,7 @@ export default function Signin() {
 
         <div className="mt-10">
           <div>
-            <form action={createUser} method="POST" className="space-y-6">
+            <form action={signIn} className="space-y-6">
               <div>
                 <label
                   htmlFor="email"
@@ -136,8 +166,9 @@ export default function Signin() {
               </div>
             </div>
 
-            <Link
-              href="/"
+            <button
+              type="button"
+              onClick={handleGoogleSignup}
               className="mt-6 flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
             >
               <svg className="h-5 w-5" aria-hidden="true" viewBox="0 0 24 24">
@@ -159,7 +190,7 @@ export default function Signin() {
                 />
               </svg>
               <span className="text-sm font-semibold leading-6">Google</span>
-            </Link>
+            </button>
           </div>
         </div>
       </div>

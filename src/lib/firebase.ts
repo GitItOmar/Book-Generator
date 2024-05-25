@@ -12,16 +12,9 @@ const auth = getAuth(firebaseApp);
 
 const authErrorMessages: { [key: string]: string } = {
   "auth/email-already-in-use": "Diese E-Mail wird bereits verwendet.",
-  "auth/invalid-email": "Die E-Mail-Adresse ist ungültig.",
-  "auth/operation-not-allowed": "E-Mail/Passwort-Konten sind nicht aktiviert.",
+  "auth/invalid-credential":
+    "Deine Anmeldedaten sind ungültig. Bitte überprüfe sie und versuche es erneut.",
   "auth/weak-password": "Das Passwort ist zu schwach.",
-  "auth/user-not-found": "Kein Benutzer mit dieser E-Mail-Adresse gefunden.",
-  "auth/wrong-password": "Falsches Passwort. Bitte versuche es erneut.",
-  "auth/user-disabled": "Dieses Benutzerkonto wurde deaktiviert.",
-  "auth/popup-blocked":
-    "Ups, dein Browser hat das Popup blockiert. Erlaube bitte Popups für diese Seite.",
-  "auth/popup-closed-by-user":
-    "Du hast das Popup geschlossen, bevor wir fertig waren. Versuch's bitte nochmal.",
   default:
     "Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es später noch einmal.",
 };
