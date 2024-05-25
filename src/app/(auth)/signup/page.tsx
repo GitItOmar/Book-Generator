@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { googleSignUp } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import createUserAction from "./actions/createUserAction";
 
 const initialState = {
@@ -70,6 +71,15 @@ export default function Signup() {
           <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Erstelle ein Konto
           </h2>
+          <p className="mt-2 text-sm leading-6 text-gray-500">
+            Bereits ein Mitglied?{" "}
+            <Link
+              href="/signin"
+              className="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
+              Melde dich an
+            </Link>
+          </p>
         </div>
 
         <div className="mt-10">
