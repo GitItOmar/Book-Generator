@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import tailwindLogo from "@/public/TailwindUI Logo.svg";
-import Link from "next/link";
 import heroImage from "@/public/README.avif";
 import { useFormState, useFormStatus } from "react-dom";
 import InputField from "@/components/InputField";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import { googleSignUp } from "@/lib/firebase";
 import createUserAction from "./actions/createUserAction";
 
 const initialState = {
@@ -36,6 +36,13 @@ function Submit() {
 export default function Signin() {
   const [state, createUser] = useFormState(createUserAction, initialState);
 
+  const handleGoogleSignup = async () => {
+    const {success, error} = await googleSignUp();
+    if (!success) {
+      toast.error(error);
+    }
+  }
+
   useEffect(() => {
     if (state.message === "error" && state.errors?.toast) {
       toast.error(state.errors.toast);
@@ -60,7 +67,7 @@ export default function Signin() {
 
           <div className="mt-10">
             <div>
-              <form action={createUser} method="POST" className="space-y-6">
+              <form action={createUser} className="space-y-6">
                 <div>
                   <InputField
                     id="email"
@@ -104,8 +111,9 @@ export default function Signin() {
                 </div>
               </div>
 
-              <Link
-                href="/"
+              <button
+                type="button"
+                onClick={handleGoogleSignup}
                 className="mt-6 flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
               >
                 <svg className="h-5 w-5" aria-hidden="true" viewBox="0 0 24 24">
@@ -127,7 +135,7 @@ export default function Signin() {
                   />
                 </svg>
                 <span className="text-sm font-semibold leading-6">Google</span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

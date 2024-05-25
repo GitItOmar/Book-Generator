@@ -3,6 +3,8 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 
@@ -40,6 +42,42 @@ export const signUp = async (email: string, password: string) => {
     return {
       error: "Es ist ein unbekannter Fehler aufgetreten.",
       success: false,
+    };
+  }
+};
+
+export const googleSignUp = async () => {
+  const provider = new GoogleAuthProvider();
+
+  try {
+    await signInWithPopup(auth, provider);
+    return { success: true };
+  } catch (err) {
+    if (err instanceof FirebaseError) {
+      switch (err.code) {
+        case "auth/popup-blocked":
+          return {
+            success: false,
+            error:
+              "Ups, dein Browser hat das Popup blockiert. Erlaube bitte Popups für diese Seite.",
+          };
+        case "auth/popup-closed-by-user":
+          return {
+            success: false,
+            error:
+              "Du hast das Popup geschlossen, bevor wir fertig waren. Versuch's bitte nochmal.",
+          };
+        default:
+          return {
+            success: false,
+            error: "Irgendwas ist schiefgelaufen. Versuch's bitte nochmal.",
+          };
+      }
+    }
+
+    return {
+      success: false,
+      error: "Irgendwas ist schiefgelaufen. Versuch's bitte nochmal.",
     };
   }
 };
