@@ -8,6 +8,7 @@ import InputField from "@/components/InputField";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { googleSignUp } from "@/lib/firebase";
+import { useRouter } from "next/navigation";
 import createUserAction from "./actions/createUserAction";
 
 const initialState = {
@@ -33,21 +34,29 @@ function Submit() {
   );
 }
 
-export default function Signin() {
+export default function Signup() {
   const [state, createUser] = useFormState(createUserAction, initialState);
+  const router = useRouter();
 
   const handleGoogleSignup = async () => {
-    const {success, error} = await googleSignUp();
-    if (!success) {
-      toast.error(error);
+    const { success, error } = await googleSignUp();
+
+    if (success) {
+      router.push("/");
     }
-  }
+
+    toast.error(error);
+  };
 
   useEffect(() => {
+    if (state.message === "success") {
+      router.push("/");
+    }
+
     if (state.message === "error" && state.errors?.toast) {
       toast.error(state.errors.toast);
     }
-  }, [state]);
+  }, [state, router]);
 
   return (
     <div className="flex min-h-full flex-1">
