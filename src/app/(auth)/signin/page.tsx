@@ -4,11 +4,10 @@ import Image from "next/image";
 import tailwindLogo from "@/public/TailwindUI Logo.svg";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { googleSignUp } from "@/lib/firebase";
 import signInAction from "./actions/signInAction";
+import useGoogleSignin from "../hooks/useGoogleSignin";
 
 const initialState = {
   message: "",
@@ -35,27 +34,13 @@ function Submit() {
 
 export default function Signin() {
   const [state, signIn] = useFormState(signInAction, initialState);
-  const router = useRouter();
-
-  const handleGoogleSignup = async () => {
-    const { success, error } = await googleSignUp();
-
-    if (success) {
-      router.push("/");
-    }
-
-    toast.error(error);
-  };
+  const { signinWithGoogle } = useGoogleSignin();
 
   useEffect(() => {
-    if (state.message === "success") {
-      router.push("/");
-    }
-
     if (state.message === "error" && state.errors?.toast) {
       toast.error(state.errors.toast);
     }
-  }, [state, router]);
+  }, [state]);
 
   return (
     <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
@@ -168,7 +153,7 @@ export default function Signin() {
 
             <button
               type="button"
-              onClick={handleGoogleSignup}
+              onClick={signinWithGoogle}
               className="mt-6 flex w-full items-center justify-center gap-3 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:ring-transparent"
             >
               <svg className="h-5 w-5" aria-hidden="true" viewBox="0 0 24 24">

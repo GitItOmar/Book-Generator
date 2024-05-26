@@ -39,7 +39,7 @@ export const signUp = async (email: string, password: string) => {
   }
 };
 
-export const googleSignUp = async () => {
+export const googleSignin = async () => {
   const provider = new GoogleAuthProvider();
 
   try {
