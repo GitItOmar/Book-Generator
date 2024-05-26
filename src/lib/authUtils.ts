@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { signIn, signUp } from "@/lib/firebase";
+import { createSession } from "@/actions/authActions";
 
 export interface PrevState {
   message: string;
@@ -47,6 +48,11 @@ export const handleAuthAction = async (
   }
 
   const authFunction = action === "signIn" ? signIn : signUp;
-  const { success, error } = await authFunction(email, password);
+  const { success, error, uid } = await authFunction(email, password);
+
+  if (uid) {
+    await createSession(uid);
+  }
+
   return { message: success ? "success" : "error", errors: { toast: error } };
 };

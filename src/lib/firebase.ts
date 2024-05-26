@@ -8,7 +8,7 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "@firebase/util";
 
-const auth = getAuth(firebaseApp);
+export const auth = getAuth(firebaseApp);
 
 const authErrorMessages: { [key: string]: string } = {
   "auth/email-already-in-use": "Diese E-Mail wird bereits verwendet.",
@@ -24,14 +24,18 @@ const getErrorMessage = (error: FirebaseError) =>
 
 export const signUp = async (email: string, password: string) => {
   try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    return { success: true };
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return { success: true, uid: userCredential.user.uid };
   } catch (error) {
     const errorMessage =
       error instanceof FirebaseError
         ? getErrorMessage(error)
         : authErrorMessages.default;
-    return { success: false, error: errorMessage };
+    return { success: false, error: errorMessage, uid: null };
   }
 };
 
@@ -39,26 +43,30 @@ export const googleSignUp = async () => {
   const provider = new GoogleAuthProvider();
 
   try {
-    await signInWithPopup(auth, provider);
-    return { success: true };
+    const userCredential = await signInWithPopup(auth, provider);
+    return { success: true, uid: userCredential.user.uid };
   } catch (error) {
     const errorMessage =
       error instanceof FirebaseError
         ? getErrorMessage(error)
         : authErrorMessages.default;
-    return { success: false, error: errorMessage };
+    return { success: false, error: errorMessage, uid: null };
   }
 };
 
 export const signIn = async (email: string, password: string) => {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
-    return { success: true };
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    return { success: true, uid: userCredential.user.uid };
   } catch (error) {
     const errorMessage =
       error instanceof FirebaseError
         ? getErrorMessage(error)
         : authErrorMessages.default;
-    return { success: false, error: errorMessage };
+    return { success: false, error: errorMessage, uid: null };
   }
 };
