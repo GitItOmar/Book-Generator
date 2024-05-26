@@ -1,8 +1,9 @@
-import { z } from "zod";
-import { signIn, signUp } from "@/lib/firebase";
-import { createSession } from "@/actions/authActions";
+"use server";
 
-export interface PrevState {
+import { signUp, createSessionCookie } from "@/lib/firebase";
+import { z } from "zod";
+
+interface PrevState {
   message: string;
   errors?: {
     email?: string;
@@ -33,11 +34,12 @@ export const validateFormData = (email: string, password: string) => {
   return errors;
 };
 
-export const handleAuthAction = async (
-  action: "signIn" | "signUp",
-  email: string,
-  password: string
-) => {
+export default async function createUserAction(
+  prevState: PrevState,
+  formData: FormData
+) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
   const errors = validateFormData(email, password);
 
   if (Object.keys(errors).length > 0) {
@@ -47,12 +49,11 @@ export const handleAuthAction = async (
     };
   }
 
-  const authFunction = action === "signIn" ? signIn : signUp;
-  const { success, error, uid } = await authFunction(email, password);
+  const { success, error, token } = await signUp(email, password);
 
-  if (uid) {
-    await createSession(uid);
+  if (token) {
+    await createSessionCookie(token);
   }
 
   return { message: success ? "success" : "error", errors: { toast: error } };
-};
+}

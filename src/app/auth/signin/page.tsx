@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useFormState } from "react-dom";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import signInAction from "./actions/signInAction";
 import SubmitButton from "../components/SubmitButton";
 import GoogleSigninButton from "../components/GoogleSigninButton";
 
@@ -20,7 +19,10 @@ const initialState = {
 };
 
 export default function Signin() {
-  const [state, signIn] = useFormState(signInAction, initialState);
+  const [state, signIn] = useFormState(
+    () => ({ message: "", errors: { toast: "" } }),
+    initialState
+  );
 
   useEffect(() => {
     if (state.message === "error" && state.errors?.toast) {
